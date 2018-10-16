@@ -1,0 +1,196 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Project Stokes
+ * Iron Mountain Crozier Artwork Network
+ *
+ */
+ 
+namespace com.stokes.network
+
+// Must first import enumerated types and events
+import com.stokes.network.enums.*
+// import com.stokes.network.events.*
+
+/****************************
+* Define Participants
+*****************************/
+
+// All participants made up of *ID and name fields
+participant ArtHandler identified by handlerID {
+  o String handlerID
+  o String name
+}
+
+participant ArtStudio identified by studioID {
+  o String studioID
+  o String name
+}
+
+participant Collector identified by collectorID {
+  o String collectorID
+  o String name
+}
+
+participant CollectionManager identified by managerID {
+  o String managerID
+  o String name
+}
+
+/****************************
+* Define Assets
+*****************************/
+
+asset Artwork identified by artworkID {
+
+  // Initialized Artwork Fields 
+  o String artworkID
+  o String artistRefID
+  o String artistNameHash optional // HASH
+  o String title
+  o String year
+  o String dimensions
+  o String medium
+  o String weight
+  o String imageRefID
+  o String imageHash optional // HASH
+  o Integer noOfPieces
+  o String edition
+  o String assetID optional
+  --> ArtStudio creator
+
+  // Ownership Fields
+  o String ownerRefID optional
+  o String ownerHash optional // HASH
+  o OwnershipStatus ownershipStatus optional
+  o DateTime ownershipStatusTimestamp optional
+
+  // Location and Transportation Fields
+  o String currentLocation optional
+  o String destLocation optional
+  o TransportationStatus transportationStatus optional
+  o DateTime transportationStatusTimestamp optional
+
+  // ConditionReports
+  o ConditionReport conditionReport optional
+
+  // Chaincode generated fields
+  o String changedByUser optional
+  o String changedByOrg optional
+  o DateTime changedByDateTime optional
+
+  // List of events
+  o ArtworkEvent[] artworkEvents
+}
+
+/****************************
+* Define Concepts
+*****************************/
+concept ConditionReport {
+  o String crRefID optional
+  o String crHash optional // HASH
+  o CRReasonCode crReasonCode
+  o String crArtHandlerRefID optional
+  o String crArtHandlerNameHash optional // HASH
+  o String crArtHandlerCertCred optional
+  o String crReviewArtHandlerRefID optional
+  o String crReviewArtHandlerNameHash optional // HASH
+  o String crReviewArtHandlerCertCred optional
+  o CRStatus crStatus 
+  o DateTime crStatusTimestamp
+}
+
+concept ArtworkEvent {
+  o String description
+  o DateTime timestamp
+}
+
+/****************************
+* Define Transactions
+*****************************/
+
+transaction CreateArtwork {
+  o String artworkID
+  o String artistRefID
+  o String artistNameHash // HASH
+  o String title
+  o String year
+  o String dimensions
+  o String medium
+  o String weight
+  o String imageRefID
+  o String imageHash // HASH
+  o Integer noOfPieces
+  o String edition
+  o String assetID
+  --> ArtStudio creator
+}
+
+transaction RequestConditionReport {
+  o String artworkID
+}
+
+transaction SubmitConditionReport {
+  o String artworkID
+  o String crRefID
+  o String crHash // HASH
+  o String crArtHandlerRefID
+  o String crArtHandlerNameHash // HASH
+  o String crArtHandlerCertCred
+}
+
+transaction CrossCheckConditionReport {
+  o String artworkID
+  o String crReviewArtHandlerRefID
+  o String crReviewArtHandlerNameHash // HASH
+  o String crReviewArtHandlerCertCred
+}
+
+transaction RequestOwnership {
+  o String artworkID
+  o String ownerRefID
+}
+
+transaction ActionOnOwnershipRequest {
+  o String artworkID
+  o String action
+}
+
+transaction RequestTransportation {
+  o String artworkID
+}
+
+transaction UpdateTransportation {
+  o String artworkID
+  o String currentLocation optional
+  o String destLocation optional
+  o String transportationStatus
+}
+
+transaction DeliverArtwork {
+  o String artworkID
+  o String crRefID
+  o String crHash // HASH
+  o String crArtHandlerRefID
+  o String crArtHandlerNameHash // HASH
+  o String crArtHandlerCertCred
+}
+
+transaction ReceiveArtwork {
+  o String artworkID
+  o String ownerHash
+}
+
+// DEMO purposes only: for creating intial participants
+transaction CreateDemoParticipants {
+}

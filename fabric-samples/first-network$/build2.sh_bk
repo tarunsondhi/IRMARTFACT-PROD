@@ -1,0 +1,42 @@
+#!/bin/bash
+ROOTDIR=/home/ubuntu/fabric-samples
+WORKDIR=${ROOTDIR}/first-network/imscripts
+LINKDIR=${ROOTDIR}/first-network
+CONSORTIUM=CryptoAnchor
+ORG1=IMInc
+ORG1_low=iminc
+DOMAIN=imblockchain.com
+ORG2=Org2
+ORG2_low=org2
+ORG1ADM=wilson
+ORG2ADM=jon
+ORG1STRING=IMInc:iminc:ORG1:${ORG1ADM}
+ORG2STRING=Org2:org2:ORG2:${ORG2ADM}
+PKG=im-evidence-blockchain
+PKGVER=0.0.2-deploy.1
+
+for i in  ${ORG1STRING} ${ORG2STRING}
+do
+	ORG=`echo ${i}|awk -F\: '{print $1}'`
+	ORGL=`echo ${i}|awk -F\: '{print $2}'`
+	ORGL=`echo ${i}|awk -F\: '{print $3}'`
+	ADM=`echo ${i}|awk -F\: '{print $4}'`
+
+	#mkdir -p ${ROOTDIR}/composer/${ORGL}
+	#ORG_CA="`awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' /home/ubuntu/fabric-samples/first-network/crypto-config/peerOrganizations/${ORGL}.${DOMAIN}/peers/peer0.${ORGL}.${DOMAIN}/tls/ca.crt`"
+	ORG_CA=`awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' /home/ubuntu/fabric-samples/first-network/crypto-config/peerOrganizations/${ORGL}.${DOMAIN}/peers/peer0.${ORGL}.${DOMAIN}/tls/ca.crt`
+	MOD_ORG_CA=`echo $ORG_CA|tr -d "\n"`
+	CERT_STR="INSERT_${ORGU}_CA_CERT"
+	awk -v "orgcaa=$MOD_ORG_CA" 'NF {sub(/\INSERT_ORG1_CA_CERT/, orgcaa); printf "%s\n",$0;}' ${ROOTDIR}/composer/byfn-network.json >${ROOTDIR}/composer/im_byfn-network.json
+	awk -v "orgcaa=$MOD_ORG_CA" 'NF {sub(/\INSERT_ORG2_CA_CERT/, orgcaa); printf "%s\n",$0;}' ${ROOTDIR}/composer/byfn-network.json >${ROOTDIR}/composer/im_byfn-network.json
+	#awk -v orgca=${ORG_CA} '1;/INSERT_ORG1_CA_CERT/{ printf orgca}' ${ROOTDIR}/composer/byfn-network.json >${ROOTDIR}/composer/im_byfn-network.json
+	#awk -v orgca=${MOD_ORG_CA} ';/INSERT_ORG1_CA_CERT/{ print orgca}' ${ROOTDIR}/composer/byfn-network.json >${ROOTDIR}/composer/im_byfn-network.json
+	#sed -i -e "s/INSERT_ORG1_CA_CERT/'"$MOD_ORG_CA"'/g"  ${ROOTDIR}/composer/byfn-network.json
+	#echo /home/ubuntu/fabric-samples/first-network/crypto-config/peerOrganizations/${ORGL}.${DOMAIN}/peers/peer0.${ORGL}.${DOMAIN}/tls/ca.crt
+	#sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/H;$!d;g;s/.*\(---BEGIN\)/\1/;w' /home/ubuntu/fabric-samples/first-network/crypto-config/peerOrganizations/${ORGL}.${DOMAIN}/peers/peer0.${ORGL}.${DOMAIN}/tls/ca.crt 
+
+
+	echo $ORG
+	echo $ORGL
+	echo $ADM
+done

@@ -35,6 +35,9 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+demo/composer/node_modules/
+demo/stokes-mvp-api-dev/node_modules/
+demo/stokes-mvp-ui-dev-master/node_modules/
 
 # TypeScript v1 declaration files
 typings/

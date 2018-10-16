@@ -1,0 +1,41 @@
+/**
+ * Enum types for the artwork statuses
+ */
+
+namespace com.stokes.network.enums
+
+/****************************
+* Define enumerated types
+*****************************/
+
+// Possible ownership statuses
+enum OwnershipStatus {
+  o ARTIST
+  o REQUEST
+  o ACCEPTED
+  o DECLINED
+  o TRANSFERRED
+}
+
+// Possible transportation statuses
+enum TransportationStatus {
+  o REQUEST
+  o LOADED
+  o UNLOADED
+  o IN_TRANSIT
+  o DELIVERED
+}
+
+// Possible condition report reasons
+enum CRReasonCode {
+  o POTENTIAL_BUY
+  o BEFORE_LOAD
+  o AFTER_UNLOAD
+}
+
+// Possible condition report statuses
+enum CRStatus {
+  o REQUEST
+  o SUBMITTED
+  o REVIEWED
+}

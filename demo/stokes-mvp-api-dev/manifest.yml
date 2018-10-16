@@ -1,0 +1,4 @@
+applications:
+- name: stokes-mvp-api-dev
+  host: stokes-mvp-api-dev
+  memory: 1024M

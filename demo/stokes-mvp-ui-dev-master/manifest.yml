@@ -1,0 +1,5 @@
+applications:
+- path: dist
+  memory: 512M
+  name: IRM-PoC2-UI
+  buildpack: staticfile_buildpack

@@ -1,0 +1,48 @@
+
+
+WORKDIR=/home/ubuntu/fabric-samples/first-network/imscripts
+LINKDIR=/home/ubuntu/fabric-samples/first-network
+CONSORTIUM=CryptoAnchor
+ORG1=IMInc
+ORG1_low=iminc
+DOMAIN=imblockchain.com
+ORG2=Org2
+ORG2_low=org2
+
+MOD_LIST="docker-compose-e2e-template.yaml docker-compose-couch.yaml docker-compose-cli.yaml docker-compose-cas-template.yaml crypto-config.yaml configtx.yaml byfn.sh"
+rm ${WORKDIR}/im**
+
+for i in `echo ${MOD_LIST}`
+do
+
+	if [ ${i} = configtx.yaml ]
+	then
+		awk -v cons=${CONSORTIUM} 'NF {sub(/\SampleConsortium/, cons); printf "%s\n",$0;}' ${WORKDIR}/${i} >  ${WORKDIR}/im_${i}_1
+                #Create Consortium
+                echo "Consortium: $CONSORTIUM is created"
+		awk -v com1=${ORG1} 'NF {sub(/\Org1/, com1); printf "%s\n",$0;}' ${WORKDIR}/im_${i}_1 >  ${WORKDIR}/im_${i}_2
+		awk -v com1low=${ORG1_low} 'NF {sub(/\org1/, com1low); printf "%s\n",$0;}' ${WORKDIR}/im_${i}_2 >  ${WORKDIR}/im_${i}_3
+		awk -v domain=${DOMAIN} 'NF {sub(/\example.com/, domain); printf "%s\n",$0;}' ${WORKDIR}/im_${i}_3 >  ${WORKDIR}/im_${i}
+	else
+		awk -v com1=${ORG1} 'NF {sub(/\Org1/, com1); printf "%s\n",$0;}' ${WORKDIR}/${i} >  ${WORKDIR}/im_${i}_1
+		awk -v com1low=${ORG1_low} 'NF {sub(/\org1/, com1low); printf "%s\n",$0;}' ${WORKDIR}/im_${i}_1 >  ${WORKDIR}/im_${i}_2 
+		awk -v domain=${DOMAIN} 'NF {sub(/\example.com/, domain); printf "%s\n",$0;}' ${WORKDIR}/im_${i}_2 >  ${WORKDIR}/im_${i}
+	
+	fi
+	if [ ${i} = byfn.sh ]
+	then
+		awk -v com1=${ORG1} 'NF {sub(/\Org1/, com1); printf "%s\n",$0;}' ${WORKDIR}/im_${i} > ${WORKDIR}/im_${i}_4
+		mv ${WORKDIR}/im_${i}_4 ${WORKDIR}/im_${i}
+		chmod 755 ${WORKDIR}/im_${i}
+	fi
+	#echo "-${i}-" is completed
+	rm  ${WORKDIR}/im_${i}_*
+	if [ -h ${LINKDIR}/${i} ]
+	then
+		#echo ${LINKDIR}/${i} is there
+		echo ${LINKDIR}/${i} verified
+	else
+		ln -s ${WORKDIR}/im_${i} ${LINKDIR}/${i}
+	fi
+done
+

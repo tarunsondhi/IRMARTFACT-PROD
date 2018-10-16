@@ -1,0 +1,9 @@
+/**
+ * Events emited during transactions
+ */
+ 
+namespace com.stokes.network.events
+
+// /****************************
+// * Define Events (not yet implemented for this mvp)
+// *****************************/

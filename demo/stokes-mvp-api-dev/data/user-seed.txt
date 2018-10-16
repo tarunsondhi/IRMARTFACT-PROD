@@ -1,0 +1,79 @@
+curl -X PUT https://4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix:b1de54b58e0fa4b339e5d0232903e407e8de3a93d56f192de7d47cbd99d5b079@4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix.cloudant.com:443/_users/org.couchdb.user:carlton.luna \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-d '{
+			"name": "carlton.luna",
+			"firstname": "Carlton",
+			"lastname": "Luna",
+			"username": "carlton.luna@collector.com",
+			"password": "cluna",
+			"roles": ["Collector"],
+			"derived_key": "nymRP7VQEkW6naN7jSVXwiEQQ6KPn6HY4mJIQ17w",
+			"password_scheme": "pbkdf2",
+			"salt": "BdefS0h4d2rOt8QANx6w9Hf8mBLLPEz0",
+			"type": "user"
+		}'
+
+curl -X PUT https://4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix:b1de54b58e0fa4b339e5d0232903e407e8de3a93d56f192de7d47cbd99d5b079@4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix.cloudant.com:443/_users/org.couchdb.user:kevin.collins \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-d '{
+			"name": "kevin.collins",
+			"firstname": "Kevin",
+			"lastname": "Collins",
+			"username": "kevin.collins@manager.com",
+			"password": "kcollins",
+			"roles": ["Collection Manager"],
+			"derived_key": "nymRP7VQEkW6naN7jSVXwiEQQ6KPn6HY4mJIQ17w",
+			"password_scheme": "pbkdf2",
+			"salt": "BdefS0h4d2rOt8QANx6w9Hf8mBLLPEz0",
+			"type": "user"
+		}'
+
+curl -X PUT https://4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix:b1de54b58e0fa4b339e5d0232903e407e8de3a93d56f192de7d47cbd99d5b079@4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix.cloudant.com:443/_users/org.couchdb.user:jan.nash \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-d '{
+			"name": "jan.nash",
+			"firstname": "Jan",
+			"lastname": "Nash",
+			"username": "jan.nash@handler.com",
+			"password": "jnash",
+			"roles": ["Art Handler"],
+			"derived_key": "nymRP7VQEkW6naN7jSVXwiEQQ6KPn6HY4mJIQ17w",
+			"password_scheme": "pbkdf2",
+			"salt": "BdefS0h4d2rOt8QANx6w9Hf8mBLLPEz0",
+			"type": "user"
+		}'
+
+curl -X PUT https://4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix:b1de54b58e0fa4b339e5d0232903e407e8de3a93d56f192de7d47cbd99d5b079@4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix.cloudant.com:443/_users/org.couchdb.user:alicia.boyd \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-d '{
+			"name": "alicia.boyd",
+			"firstname": "Alicia",
+			"lastname": "Boyd",
+			"username": "alicia.boyd@artist.com",
+			"password": "aboyd",
+			"roles": ["Artist Representative"],
+			"derived_key": "nymRP7VQEkW6naN7jSVXwiEQQ6KPn6HY4mJIQ17w",
+			"password_scheme": "pbkdf2",
+			"salt": "BdefS0h4d2rOt8QANx6w9Hf8mBLLPEz0",
+			"type": "user"
+		}'
+
+curl -X PUT https://4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix:b1de54b58e0fa4b339e5d0232903e407e8de3a93d56f192de7d47cbd99d5b079@4ac38e3c-7516-4438-a33d-b597f6c94ac9-bluemix.cloudant.com:443/_users/org.couchdb.user:adam.bell \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-d '{
+			"name": "adam.bell",
+			"firstname": "Adam",
+			"lastname": "Bell",
+			"username": "adam.bell@artist.com",
+			"password": "abell",
+			"roles": ["Artist Representative"],
+			"derived_key": "nymRP7VQEkW6naN7jSVXwiEQQ6KPn6HY4mJIQ17w",
+			"password_scheme": "pbkdf2",
+			"salt": "BdefS0h4d2rOt8QANx6w9Hf8mBLLPEz0",
+			"type": "user"
+		}'

@@ -1,0 +1,609 @@
+<div class="container">
+  <div class="row">
+    <div class="col nav-wrapper effect1">
+      <div class="col-2 ibmartfacts" (click)="logout()"><img src="../../assets/img/arrow-icon.png">
+        <div style="margin: -22px 0px 0px 10px; font-weight: 600">&nbsp;&nbsp;&nbsp;Crozier</div>
+      </div>
+      <div class="col-3 role">{{displayedRole}}&nbsp;&nbsp;&nbsp;<img src="../../assets/img/avatar.png"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-10 offset-1 main-content">
+      <div class="row tab-wrapper">
+        <div id="tab1" class="tabs tab1" (click)="closeAllSub();activeTab='1';setTabStyling();">{{firstTab}}</div>
+        <div id="tab2" class="tabs tab2" (click)="closeAllSub();activeTab='2';setTabStyling();">{{secondTab}}
+        </div>
+        <div id="tab3" class="tabs tab3" (click)="closeAllSub();activeTab='3';setTabStyling();">{{thirdTab}}</div>
+        <div class="tabs addArtBtn offset-1" *ngIf="verifyRole(['Artist Representative']) && !toggleUploadArtwork"
+             (click)="model={};closeAllSub();toggleUploadArtwork=true">Add New Art
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 40px">
+    <div class="col-10 offset-1">
+      <div class="row" *ngIf="activeTab=='1'">
+        <div class="container-fluid" *ngIf="!toggleUploadArtwork && !toggleArtworkDetail">
+          <div class="row">
+            <div *ngFor="let a of artwork.tab1" class="image-block col-sm-3 img-tiles"
+                 [style.background-image]="getStyle(a.image)" (click)="configDetails(a);">
+              <p> {{a.title}} <br> {{a.artistName}} <br> {{a.artworkID}} </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="activeTab=='2'">
+        <div class="container-fluid" *ngIf="!toggleUploadArtwork && !toggleArtworkDetail">
+          <div class="row">
+            <div *ngFor="let a of artwork.tab2" class="image-block col-sm-3 img-tiles"
+                 [style.background-image]="getStyle(a.image)" (click)="configDetails(a)">
+              <p> {{a.title}} <br> {{a.artistName}} <br> {{a.artworkID}} </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="activeTab=='3'">
+        <div class="container-fluid" *ngIf="!toggleUploadArtwork && !toggleArtworkDetail">
+          <div class="row">
+            <div *ngFor="let a of artwork.tab3" class="image-block col-sm-3 img-tiles"
+                 [style.background-image]="getStyle(a.image)" (click)="configDetails(a)">
+              <p> {{a.title}} <br> {{a.artistName}} <br> {{a.artworkID}}  </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-10 offset-1 main-content">
+      <div *ngIf="toggleUploadArtwork">
+        <form name="form" #f="ngForm" novalidate>
+          <div class="container">
+            <div class="row">
+              <div class="col-8 left-wrapper">
+                <div class="row" style="margin-left: -45px">
+                  <div class="col-6">
+                    <input id="title" type="text" class="form-control title-input" name="artworkTitle"
+                           [(ngModel)]="model.artworkTitle"
+                           #artworkTitle="ngModel" [ngClass]="{ 'is-invalid': f.submitted && artworkTitle.invalid }"
+                           placeholder="Artwork Title" required/>
+                  </div>
+                  <div class="col-4 upload-btn-wrapper" style="padding: 40px 0 0 0">
+                    <button class="btn x-btn">Upload Artwork</button>
+                    <input id="attachment" type="file" accept="image/*" (change)="preview_image($event)"
+                           class="form-control-file" name="attachment"
+                           [(ngModel)]="model.attachment" #attachment="ngModel"
+                           [ngClass]="{ 'is-invalid': f.submitted && attachment.invalid }" required>
+                  </div>
+                </div>
+                <div class="row" style="margin-left: -30px">
+                  <img id="output_image"/>
+                </div>
+              </div>
+              <div class="col-4">
+                  <div class="form-group">
+                      <label for="assetID">Asset Id</label>
+                      <input id="assetID" type="text" (keyup)="numbersOnly(model.assetID)" (focusout)="numbersOnly(model.assetID)" class="form-control" name="assetID" [(ngModel)]="model.assetID"
+                             #assetID="ngModel" [ngClass]="{ 'is-invalid': f.submitted && assetID.invalid }"
+                             placeholder="Asset Id" required/>
+                      <div *ngIf="notNumber"><span class="numberErr">Asset Id is numeric only</span></div>
+                      <div *ngIf="f.submitted && assetID.invalid" class="invalid-feedback">
+                        <div *ngIf="assetID.errors.required">Asset Id for Art is required</div>
+                      </div>
+                    </div>
+                <div class="form-group">
+                  <label for="name">Artist</label>
+                  <input id="name" type="text" class="form-control" name="artistName" [(ngModel)]="model.artistName"
+                         #artistName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && artistName.invalid }"
+                         placeholder="Artist Name" required/>
+                  <div *ngIf="f.submitted && artistName.invalid" class="invalid-feedback">
+                    <div *ngIf="artistName.errors.required">Name for artist is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="year">Piece Created</label>
+                  <input id="year" type="text" class="form-control" name="year"
+                         [(ngModel)]="model.year" #year="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && year.invalid }" required
+                         placeholder="YYYY">
+                  <div *ngIf="f.submitted && year.invalid" class="invalid-feedback">
+                    <div *ngIf="year.errors.required">Year of artwork is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="medium">Medium</label>
+                  <input id="medium" type="text" class="form-control" name="medium"
+                         [(ngModel)]="model.medium" #medium="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && medium.invalid }" required
+                         placeholder="Medium of Artwork">
+                  <div *ngIf="f.submitted && medium.invalid" class="invalid-feedback">
+                    <div *ngIf="medium.errors.required">Medium of artwork is required</div>
+                  </div>
+                </div>
+                <!--<div class="form-group">-->
+                  <!--<label for="dimensions">Dimensions</label>-->
+                  <!--<input id="dimensions" type="text" class="form-control" name="dimensions"-->
+                         <!--[(ngModel)]="model.dimensions" #dimensions="ngModel"-->
+                         <!--[ngClass]="{ 'is-invalid': f.submitted && dimensions.invalid }" required-->
+                         <!--placeholder="Dimensions of Artwork">-->
+                  <!--<div *ngIf="f.submitted && year.invalid" class="invalid-feedback">-->
+                    <!--<div *ngIf="dimensions.errors.required">Dimensions of artwork is required</div>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <div class="form-group">
+                  <label for="height">Height</label>
+                  <input id="height" type="text" class="form-control" name="height"
+                         [(ngModel)]="model.height" #height="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && height.invalid }" required
+                         placeholder="Height of Artwork">
+                  <div *ngIf="f.submitted && year.invalid" class="invalid-feedback">
+                    <div *ngIf="height.errors.required">Height of artwork is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="width">Width</label>
+                  <input id="width" type="text" class="form-control" name="width"
+                         [(ngModel)]="model.width" #width="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && width.invalid }" required
+                         placeholder="Width of Artwork">
+                  <div *ngIf="f.submitted && year.invalid" class="invalid-feedback">
+                    <div *ngIf="width.errors.required">Width of artwork is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="depth">Depth</label>
+                  <input id="depth" type="text" class="form-control" name="depth"
+                         [(ngModel)]="model.depth" #depth="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && depth.invalid }" required
+                         placeholder="Depth of Artwork">
+                  <div *ngIf="f.submitted && year.invalid" class="invalid-feedback">
+                    <div *ngIf="depth.errors.required">Depth of artwork is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="weight">Weight</label>
+                  <input id="weight" type="text" class="form-control" name="weight"
+                         [(ngModel)]="model.weight" #weight="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && weight.invalid }" required
+                         placeholder="Weight of Artwork">
+                  <div *ngIf="f.submitted && weight.invalid" class="invalid-feedback">
+                    <div *ngIf="weight.errors.required">Weight of artwork is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="edition">Edition</label>
+                  <input id="edition" type="text" class="form-control" name="edition"
+                         [(ngModel)]="model.edition" #edition="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && edition.invalid }" required
+                         placeholder="Edition of Artwork">
+                  <div *ngIf="f.submitted && edition.invalid" class="invalid-feedback">
+                    <div *ngIf="edition.errors.required">Edition of Artwork is required</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="noOfPieces">Number of Pieces</label>
+                  <input id="noOfPieces" type="text" class="form-control" name="noOfPieces"
+                         [(ngModel)]="model.noOfPieces" #noOfPieces="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && noOfPieces.invalid }" required
+                         placeholder="Number of Artwork Pieces">
+                  <div *ngIf="f.submitted && noOfPieces.invalid" class="invalid-feedback">
+                    <div *ngIf="noOfPieces.errors.required">Number of Artwork Pieces is required</div>
+                  </div>
+                </div>
+                <button class="btn custom-btn" style="text-align: center" [disabled]="!f.form.valid"
+                        (click)="onSubmit(f.form)">Add Artwork to Network
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="toggleArtworkDetail">
+        <div class="container">
+          <div class="row" style="padding-bottom: 50px">
+            <div class="col" style="border-right: darkgray solid 1px; max-width: 60%">
+              <div class="row" style="padding-bottom: 20px">
+                <span class="title-label">{{model.title}}</span>&nbsp;&nbsp;<span class="artist-label">{{model.artistName}}</span>
+                <div class="col-3 offset-5" *ngIf="hasConditionReport">
+                  <button class="btn btn-primary x-btn" style="border-style: none" (click)="viewCr()">View Condition
+                    Report
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="container-download">
+                <div class="img" [style.background-image]="getStyle(model.image)"
+                     style="background-repeat: no-repeat; background-size: 100% 100%;height: 600px; width: 95%"></div>
+              
+                      <div class="overlay"></div>
+                     <div class="btn1"><a (click)="download(model.orginialImagePath)"> <i class="fa fa-download" style="font-size:30px;"></i> </a> </div>
+               </div>
+            </div>
+            </div>
+            <div class="col-4" style="margin-left: 30px">
+              <div class="row" style="border-bottom: darkgray solid 1px;padding-bottom: 30px; width:700px">
+                <div class="col" style="width: 50%">
+                  <div class="current-status">CURRENT STATUS</div>
+                  <!--<div style="font-size: 14px">{{currentStatus}}</div>-->
+                  <div>{{currentStatus}}</div>
+                  <div style="width: 310px">As of {{statusTimestamp}}</div>
+                </div>
+                <div class="col" *ngIf="model.transportationStatus != 'UNLOADED'">
+                  <input *ngIf="showCrUploadButton" type="text" style="width: 200px; margin-bottom: 10px"
+                         placeholder="Handler Credentials" [(ngModel)]="crArtHandlerCertCred">
+                  <div class="upload-btn-wrapper" *ngIf="showCrUploadButton">
+                    <button class="btn x-btn" [disabled]="crArtHandlerCertCred.length <= 0">Upload Condition Report
+                    </button>
+                    <input type="file" (change)="uploadCr($event)" [disabled]="crArtHandlerCertCred.length <= 0"/>
+                  </div>
+                  <button class="interested-btn" style="width: auto" *ngIf="showActionButton" (click)="detailAction()">
+                    {{actionButtonLabel}}
+                  </button>
+                </div>
+                <div class="col" *ngIf="model.transportationStatus == 'UNLOADED'">
+                  <input *ngIf="showCrUploadButton" type="text" style="width: 200px; margin-bottom: 10px"
+                         placeholder="Handler Credentials" [(ngModel)]="crArtHandlerCertCred">
+                  <div class="upload-btn-wrapper" *ngIf="showCrUploadButton">
+                    <button class="btn x-btn" [disabled]="crArtHandlerCertCred.length <= 0">Upload Condition Report
+                    </button>
+                    <input type="file" (change)="uploadSecondCr($event)" [disabled]="crArtHandlerCertCred.length <= 0"/>
+                  </div>
+                  <button class="interested-btn" style="width: auto" *ngIf="showActionButton" (click)="detailAction()">
+                    {{actionButtonLabel}}
+                  </button>
+                </div>
+              </div>
+              <div class="row" style="padding-top: 50px">
+                <div class="col">
+                  <div class="details-label">Details</div>
+                  <div>
+                    <label class="detail-value-header">Asset Id:</label>
+                    <span class="detail-value-label">{{model.assetID}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Title:</label>
+                    <span class="detail-value-label">{{model.title}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Artist:</label>
+                    <span class="detail-value-label">{{model.artistName}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Date Created:</label>
+                    <span class="detail-value-label">{{model.year}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Medium:</label>
+                    <span class="detail-value-label">{{model.medium}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Dimensions (height x width):</label>
+                    <span class="detail-value-label">{{model.dimensions}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Weight:</label>
+                    <span class="detail-value-label">{{model.weight}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Edition:</label>
+                    <span class="detail-value-label">{{model.edition}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Piece(s):</label>
+                    <span class="detail-value-label">{{model.noOfPieces}}</span>
+                  </div>
+                  <div>
+                    <label class="detail-value-header">Artwork ID:</label>
+                    <span class="detail-value-label">{{model.artworkID}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="row activity">Activity</div>
+              <div class="row" style="font-size: 13px">
+                <!--
+                <div *ngFor="let h of history" style='width: 120px;font-family: "IBMPlexSans-Light", Helvetica, Arial, serif;font-weight: 600; margin-right:15px'>
+                  <div [ngStyle]="getOutterCircleStyle()">
+                    <div [ngStyle]='getInnerCircleStyle()'>
+                      <div *ngIf="currentEvent()" [ngStyle]='getActiveInnerCircleStyle()'></div>
+                      <img *ngIf="!currentEvent()" src="../../assets/img/check.png" style="height: 25px; margin: 6px 0 0 6px;"/>
+                      <div [ngStyle]="getLineStyle()"></div>
+                    </div>
+                  </div>
+                  {{h.description}}
+                </div>
+                -->
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Artwork Identity Created')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  Artwork Identity Created
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Condition Report Requested')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Condition Report Requested')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Condition Report Requested
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Condition Report Submitted')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Condition Report Submitted')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Condition Report Submitted
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Custody Request Submitted')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Custody Request Submitted')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Custody Request Submitted
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Custody Request Accepted')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Custody Request Accepted')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Custody Request Accepted
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Transportation Request Submitted')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Transportation Request Submitted')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Transportation Request Submitted
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Transportation Updated: Loaded')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Transportation Updated: Loaded')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Transportation Updated: Loaded
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Transportation Updated: In Transit')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Transportation Updated: In Transit')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Transportation Updated: In Transit
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Transportation Updated: Unloaded')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Transportation Updated: Unloaded')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Transportation Updated: Unloaded
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Transportation Updated: Delivered')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                      <div class="line"></div>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Transportation Updated: Delivered')">
+                    <div class="innerCircle">
+                      <div class="inactiveLine"></div>
+                    </div>
+                  </div>
+                  Delivery Condition Report Uploaded
+                </div>
+                <div class="status-wrapper">
+                  <div class="outerCircle" *ngIf="checkStatus('Transportation Updated: Delivered')">
+                    <div class="innerCircle">
+                      <img class="check" src="../../assets/img/check.png"/>
+                    </div>
+                  </div>
+                  <div class="inactiveOuterCircle" *ngIf="!checkStatus('Transportation Updated: Delivered')">
+                    <div class="innerCircle">
+                    </div>
+                  </div>
+                  Transportation Updated: Delivered
+                </div>
+              </div>
+              <div class="row" style="padding: 30px 0 30px 0;">
+                <h5 style="width: 100%">History</h5>
+                <div *ngFor="let h of history">
+                  <div style="width: 100%">
+                    <div class="row" style="width: 900px;">
+                      <div class="col-4"
+                           style='font-family: "IBMPlexSans-Light", Helvetica, Arial, serif;font-weight: 600'>
+                        {{formatDate(h.timestamp)}}
+                      </div>
+                      <div class="col">{{h.description}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="width:100%;">
+          <div class="col">
+          <div class="row" style="padding: 30px 0 30px 0;">
+              <a class="btn" (click)="getTransactionsByArtworkId(model.artworkID)"><h5 style="width: 100%"><i class="fa fa-plus-circle" *ngIf="showTransactions==false"></i><i class="fa fa-minus-circle" *ngIf="showTransactions==true"></i>Blockchain Transactions</h5></a>
+            </div>
+            <div class="row" *ngIf="showTransactions==true">
+              <div class="mat-table-container mat-elevation-z8" >
+                  <mat-table #table [dataSource]="transactions" class=" div-head-row">
+                    
+                      <ng-container matColumnDef="transactionID">
+                          <mat-header-cell *matHeaderCellDef  class="div-cell"> Transaction Id  </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.transactionID}} </mat-cell>
+                        </ng-container>
+    
+                    <ng-container matColumnDef="transactionType">
+                        <mat-header-cell *matHeaderCellDef  class="div-cell">Transaction Type </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.transactionType}} </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="blockNo">
+                          <mat-header-cell *matHeaderCellDef  class="div-cell"> Block No. </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.blockNo}} </mat-cell>
+                        </ng-container>
+                   
+                      <ng-container matColumnDef="transactionTimestamp">
+                          <mat-header-cell *matHeaderCellDef  class="div-cell"> Date </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.transactionTimestamp | date: 'MMM dd, yyy, hh:mm:ss a'}} </mat-cell>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="user">
+                            <mat-header-cell *matHeaderCellDef  class="div-cell"> User  </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.user}} </mat-cell>
+                          </ng-container>
+                       
+                    <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayColumns;"></mat-row>
+                  </mat-table>
+                </div>
+              </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<im-modal id="interested-notification">
+  <h4>Message Sent</h4>
+  <p>You have notified [Art Handler] of your interest in this art.</p>
+  <p>A condition report will be created and made available for you to review before proceeding.</p>
+  <div class="row">
+    <div class="col-2 offset-5">
+      <button class="btn btn-primary x-btn" (click)="closeModal('interested-notification')">Ok</button>
+    </div>
+  </div>
+</im-modal>
+<im-modal id="cr-preview">
+  <button type="button" class="btn btn-primary x-btn float-right" (click)="closeModal('cr-preview')">X
+  </button>
+  <iframe id="pdf_content" type="application/pdf" [src]="loadPDF(crPdfSrc)" width="100%" height="500" frameborder="0"
+          allowfullscreen></iframe>
+</im-modal>
+<im-modal id="purchase-request">
+  <h4>Message Sent</h4>
+  <p>You have notified [Artist] that you would like to acquire this art.</p>
+  <p>Once you negotiate terms and both you and [Artist] agree, a transit request will be initiated and you can track the
+    progress of the art to its destination.</p>
+  <div class="row">
+    <div class="col-2 offset-5">
+      <button class="btn btn-primary x-btn" (click)="closeModal('purchase-request')">Ok</button>
+    </div>
+  </div>
+</im-modal>
+<im-modal id="transit-request" style="text-align: center;">
+  <h4>Transfer Custody Request</h4>
+  <p>Relinquish custody?</p>
+  <div style="padding: 0 0 30px 15px">
+    <div class="row" style="padding-left: 25%">
+      <div class="col-4">
+        <button class="btn btn-primary x-btn" style="border-style: none"
+                (click)="showActionButton=false;closeModal('transit-request');actionOnOwnershipRequest()">Accept
+        </button>
+      </div>
+      <div class="col-4">
+        <button class="btn btn-primary x-btn" style="border-style: none" (click)="closeModal('transit-request');">
+          Decline
+        </button>
+      </div>
+    </div>
+  </div>
+</im-modal>
+<im-modal id="initiate-transport">
+  <form name="form" #f="ngForm" novalidate>
+    <h4>Transit Request</h4>
+    <p>Please enter the destination where the [photo name] should be delivered.</p>
+    <div style="padding: 0 0 30px 15px">
+      <div class="row">
+        <div class="col-4" style="margin-right: 50px">
+          <div class="row">From:</div>
+          <div class="row">
+            <input type="text" placeholder="Sender">
+          </div>
+          <div class="row"> To:</div>
+          <div class="row">
+            <input type="text" placeholder="Receiver">
+          </div>
+        </div>
+        <div class="col">
+          <div class="row">Address:</div>
+          <div class="row">
+            <input type="text" placeholder="Start Location" [(ngModel)]="transit.currentLocation"
+                   [ngModelOptions]="{standalone: true}" required>
+          </div>
+          <div class="row">Address:</div>
+          <div class="row">
+            <input type="text" placeholder="End Location" [(ngModel)]="transit.destLocation"
+                   [ngModelOptions]="{standalone: true}" required>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary x-btn" [disabled]="transit.destLocation != undefined && !transit.destLocation.length || transit.currentLocation != undefined && !transit.currentLocation.length" (click)="closeModal('transit-request');transportationUpdate()">Initiate
+      Transit
+    </button>
+  </form>
+</im-modal>

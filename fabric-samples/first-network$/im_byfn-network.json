@@ -1,0 +1,138 @@
+{
+    "name": "byfn-network",
+    "x-type": "hlfv1",
+    "version": "1.0.0",
+    "client": {
+        "organization": "ORGREPLACE_HERE",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300",
+                    "eventHub": "300",
+                    "eventReg": "300"
+                },
+                "orderer": "300"
+            }
+        }
+    },
+    "channels": {
+        "mychannel": {
+            "orderers": [
+                "orderer.imblockchain.com"
+            ],
+            "peers": {
+                "peer0.iminc.imblockchain.com": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "eventSource": true
+                },
+                "peer1.iminc.imblockchain.com": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "eventSource": true
+                },
+                "peer0.org2.imblockchain.com": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "eventSource": true
+                },
+                "peer1.org2.imblockchain.com": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "eventSource": true
+                }
+            }
+        }
+    },
+    "organizations": {
+        "IMInc": {
+            "mspid": "IMIncMSP",
+            "peers": [
+                "peer0.iminc.imblockchain.com",
+                "peer1.iminc.imblockchain.com"
+            ],
+            "certificateAuthorities": [
+                "ca.iminc.imblockchain.com"
+            ]
+        },
+        "Org2": {
+            "mspid": "Org2MSP",
+            "peers": [
+                "peer0.org2.imblockchain.com",
+                "peer1.org2.imblockchain.com"
+            ],
+            "certificateAuthorities": [
+                "ca.org2.imblockchain.com"
+            ]
+        }
+    },
+    "orderers": {
+        "orderer.imblockchain.com": {
+            "url": "grpcs://localhost:7050",
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer.imblockchain.com"
+            },
+            "tlsCACerts": {
+                "pem": "INSERT_ORDERER_CA_CERT"
+            }
+        }
+    },
+    "peers": {
+        "peer0.iminc.imblockchain.com": {
+            "url": "grpcs://localhost:7051",
+            "eventUrl": "grpcs://localhost:7053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.iminc.imblockchain.com"
+            },
+            "tlsCACerts": {
+                "pem": "INSERT_ORG1_CA_CERT"
+            }
+        },
+        "peer1.iminc.imblockchain.com": {
+            "url": "grpcs://localhost:8051",
+            "eventUrl": "grpcs://localhost:8053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.iminc.imblockchain.com"
+            },
+            "tlsCACerts": {
+                "pem": "INSERT_ORG1_CA_CERT"
+            }
+        },
+        "peer0.org2.imblockchain.com": {
+            "url": "grpcs://localhost:9051",
+            "eventUrl": "grpcs://localhost:9053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.org2.imblockchain.com"
+            },
+            "tlsCACerts": {
+                "pem": "INSERT_ORG2_CA_CERT"
+            }
+        },
+        "peer1.org2.imblockchain.com": {
+            "url": "grpcs://localhost:10051",
+            "eventUrl": "grpcs://localhost:10053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.org2.imblockchain.com"
+            },
+            "tlsCACerts": {
+                "pem": "INSERT_ORG2_CA_CERT"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.iminc.imblockchain.com": {
+            "url": "https://localhost:7054",
+            "caName": "ca-iminc",
+            "httpOptions": {
+                "verify": false
+            }
+        },
+        "ca.org2.imblockchain.com": {
+            "url": "https://localhost:8054",
+            "caName": "ca-org2",
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}

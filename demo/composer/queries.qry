@@ -1,0 +1,97 @@
+/*
+* Queries for Project Stokes MVP
+*/
+
+/********************************************
+* UI Queries
+* These quieries are used in the ui to select groups of assets
+********************************************/
+
+// Basic query to get all Artwork assets
+query getAllArtwork {
+  description: "Get all Artwork Assets"
+  statement:
+      SELECT com.stokes.network.Artwork
+}
+
+// Query with artworkID param to get a single Artwork asset
+query getArtworkByID {
+  description: "Select Artwork by ID"
+  statement:
+      SELECT com.stokes.network.Artwork
+          WHERE (artworkID == _$artworkID)
+}
+
+// Next Three Querires are for find Artwork:
+
+// Query with param year to get related Artwork assets
+query findArtworkByYear {
+  description: "Select Artwork by year"
+  statement:
+      SELECT com.stokes.network.Artwork
+          WHERE (year == _$year)         
+}
+
+// Query with param title to get related Artwork assets
+query findArtworkByTitle {
+  description: "Select Artwork by title"
+  statement:
+      SELECT com.stokes.network.Artwork
+          WHERE (title == _$title)        
+}
+
+// Query with param title AND year to get related Artwork assets
+query findArtworkByYearTitle {
+  description: "Select Artwork by year and title"
+  statement:
+      SELECT com.stokes.network.Artwork
+          WHERE ((year == _$year) AND (title == _$title))       
+}
+
+// Query for assets with ownershipStatus ARTIST
+query getArtworkWithOwnershipArtist {
+  description: "Get artwork with ownershipStatus of 'ARTIST'"
+  statement:
+    SELECT com.stokes.network.Artwork
+      WHERE (ownershipStatus == "ARTIST")
+}
+
+// Query for assets with ownershipStatus REQUEST
+query getArtworkWithOwnershipRequest {
+  description: "Get artwork with ownershipStatus of 'REQUEST'"
+  statement:
+    SELECT com.stokes.network.Artwork
+      WHERE ((ownershipStatus == "REQUEST") OR (ownershipStatus == "ACCEPTED")) 
+}
+
+// Query for assets with ownershipStatus ACCEPTED
+query getArtworkWithOwnershipTransferred {
+  description: "Get artwork with ownershipStatus of 'ACCEPTED'"
+  statement:
+    SELECT com.stokes.network.Artwork
+      WHERE ((ownershipStatus == "TRANSFERRED"))
+}
+
+// Query for assets with crStatus REQUEST
+query getArtworkWithCRRequest {
+  description: "Get artwork with crStatus of 'REQUEST'"
+  statement:
+    SELECT com.stokes.network.Artwork
+      WHERE (conditionReport.crStatus == "REQUEST")
+}
+
+// Query for assets with transportationStatus's for in progress
+query getArtworkWithTransitInProgress {
+  description: "Get artwork with transportationStatus of 'LOADED' or 'IN_TRANSIT'"
+  statement:
+    SELECT com.stokes.network.Artwork
+      WHERE ((((transportationStatus == "LOADED") OR (transportationStatus == "IN_TRANSIT")) OR ((transportationStatus == "UNLOADED") OR (transportationStatus == "REQUEST")) AND (conditionReport.crStatus != "REQUEST")))
+}
+
+// Query for assets with transportationStatus DELIVERED
+query getArtworkWithTransitCompleted {
+  description: "Get artwork with transportationStatus of 'DELIVERED'"
+  statement:
+    SELECT com.stokes.network.Artwork
+      WHERE (transportationStatus == "DELIVERED")
+}
