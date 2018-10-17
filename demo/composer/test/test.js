@@ -103,7 +103,7 @@ describe('Project Stokes Crozier Artwork Network', () => {
         artStudio1Relationship = factory.newRelationship(namespace, 'ArtStudio', artStudio1.getIdentifier());
 
         const artwork = factory.newResource(namespace, 'Artwork', "1000100010");
-        artwork.assetID = '1';
+        artwork.assetID = 111;
         artwork.artistRefID = 'artist-1';
         artwork.title = "Beautiful Art";
         artwork.year = "2017";
@@ -119,7 +119,7 @@ describe('Project Stokes Crozier Artwork Network', () => {
         artwork.artworkEvents = [];
 
         const artwork2 = factory.newResource(namespace, 'Artwork', "1000100011");
-        artwork.assetID = '1';
+        artwork.assetID = 111;
         artwork2.artistRefID = 'artist-2';
         artwork2.title = "Groovy Art";
         artwork2.year = "2016";
@@ -144,7 +144,7 @@ describe('Project Stokes Crozier Artwork Network', () => {
             // create and submit the CreateArtwork transaction
             const createArtworkTx = factory.newTransaction(namespace, 'CreateArtwork');
             createArtworkTx.artworkID = '9999999999';
-            createArtworkTx.assetID = '1';
+            createArtworkTx.assetID = 111;
             createArtworkTx.artistRefID = 'artist-1';
             createArtworkTx.title = "Pretty Art";
             createArtworkTx.year = "2018";

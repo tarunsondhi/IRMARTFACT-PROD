@@ -4,7 +4,7 @@
 	},
 	"name": "stokes-network",
 	"description": "Artwork Tracking Network",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"scripts": {
 		"prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/stokes-network.bna",
 		"postlint": "npm run licchk",

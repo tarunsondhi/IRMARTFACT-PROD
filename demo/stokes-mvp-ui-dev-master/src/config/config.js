@@ -1,10 +1,7 @@
 export const config = {
   CLOUDANT_WAIT_TIME: 1000,
-  LOCAL_BASE_URL: 'http://localhost:3000/',
-  LOCAL_BASE_URL_1: 'http://ec2-18-191-139-6.us-east-2.compute.amazonaws.com:3000/',
-  API_BASE_URL_1: 'http://ec2-18-191-223-251.us-east-2.compute.amazonaws.com:3000/',
-  API_BASE_URL: 'http://localhost:3000/',
-  API_BASE_URL_2: 'http://ec2-18-191-139-6.us-east-2.compute.amazonaws.com:3000/',
+  LOCAL_BASE_URL: 'http://ec2-18-191-157-234.us-east-2.compute.amazonaws.com:3000/',
+  API_BASE_URL: 'http://ec2-18-191-157-234.us-east-2.compute.amazonaws.com:3000/',
   ENDPOINT: {
     artwork: 'artwork/',
     findArtwork: 'findArtwork?',
